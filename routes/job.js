@@ -35,6 +35,7 @@ router.post("/", async (req, res) => {
     const job = new Job({
       _id: new mongoose.Types.ObjectId(),
       partsDamaged: req.body.partsDamaged,
+      serviceTypeRequired: req.body.serviceTypeRequired,
       carDetails: {
         regYear: req.body.carRegYear,
         licenseNum: req.body.carLicenseNum,

@@ -1,9 +1,9 @@
 {
     "mongo": {
-        "url": "mongodb://localhost:27017",
+        "url": "mongodb+srv://cluster0.e8lcv.gcp.mongodb.net",
         "dbName": "carfix-db",
-        "user": "",
-        "pass": ""
+        "user": "carfix-user",
+        "pass": "zM5u5PZm8S1tEv7f"
     },
     "host": "8080",
     "accessToken": "some-private-key"

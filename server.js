@@ -6,6 +6,8 @@ import nconf from 'nconf';
 import { setupConfigs } from './config/config'
 import { connectDb } from './database'
 import jobRoutes from './routes/job'
+import driverRoutes from './routes/driver'
+import mechanicRoutes from './routes/mechanic'
 
 const server = express();
 
@@ -26,6 +28,9 @@ const serverInit = (async () => {
     })
 
     server.use('/job', jobRoutes)
+    server.use('/mechanic', mechanicRoutes)
+    server.use('/driver', driverRoutes)
+
 
     const host = process.env.PORT || nconf.get('host')
     server.listen(host, () => console.log(`Example app listening on port ${host}!`));

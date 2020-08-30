@@ -26,17 +26,17 @@ router.get("/me", async (req, res) => {
 
 router.put(
   "/updatemechanicprofile",
-  [
-    auth,
-    [
-      check("workshopName", "workshopName is required").not().isEmpty(),
-      check("workshopAddress", "workshopAddress is required").not().isEmpty(),
-      check("email", "email is required").not().isEmpty(),
-      check("phoneNumber", "phone number is required").not().isEmpty(),
-      check("whatsAppNumber", "whatsAppNumber is required").not().isEmpty(),
-      check("telegramId", "telegramId is required").not().isEmpty(),
-    ],
-  ],
+  // [
+  //   auth,
+  //   [
+  //     check("workshopName", "workshopName is required").not().isEmpty(),
+  //     check("workshopAddress", "workshopAddress is required").not().isEmpty(),
+  //     check("email", "email is required").not().isEmpty(),
+  //     check("phoneNumber", "phone number is required").not().isEmpty(),
+  //     check("whatsAppNumber", "whatsAppNumber is required").not().isEmpty(),
+  //     check("telegramId", "telegramId is required").not().isEmpty(),
+  //   ],
+  // ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -74,4 +74,4 @@ router.put(
   }
 );
 
-module.exports = router;
+export default router;

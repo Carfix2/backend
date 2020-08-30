@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 import * as jobStatus from '../../enums/jobStatus'
 import * as serviceType from '../../enums/serviceType'
+import * as carParts from '../../enums/carParts'
 
 const jobSchema = Schema({
     _id: Schema.Types.ObjectId,
@@ -14,13 +15,12 @@ const jobSchema = Schema({
         ref: 'Quote'
     }],
     serviceTypeRequired: {
-        type: Number,
-        required: true,
-        default: serviceType.en.OTHER.ordinal
+        type: [Number],
+        default: [serviceType.en.OTHER.ordinal]
     },
     partsDamaged: {
-        type: String,
-        required: true,
+        type: [Number],
+        default: [carParts.en.OTHER.ordinal]
     },
     carDetails: {
         regYear: {
@@ -57,6 +57,14 @@ const jobSchema = Schema({
     },
     requestedRepairDate: {
         type: Date,
+    },
+    acceptedQuote: {
+        type: Schema.Types.ObjectId,
+        ref: 'Quote'
+    },
+    assignedMechanic : {
+        type: Schema.Types.ObjectId,
+        ref: 'Mechanic'
     }
 })
 
