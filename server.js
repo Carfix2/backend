@@ -8,6 +8,7 @@ import { connectDb } from './database'
 import jobRoutes from './routes/job'
 import driverRoutes from './routes/driver'
 import mechanicRoutes from './routes/mechanic'
+import quoteRoutes from './routes/quote'
 
 const server = express();
 
@@ -30,6 +31,7 @@ const serverInit = (async () => {
     server.use('/job', jobRoutes)
     server.use('/mechanic', mechanicRoutes)
     server.use('/driver', driverRoutes)
+    server.use('/quote', quoteRoutes)
 
 
     const host = process.env.PORT || nconf.get('host')
