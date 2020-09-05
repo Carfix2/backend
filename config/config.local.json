@@ -1,10 +1,10 @@
 {
-    "mongo": {
-        "url": "mongodb://localhost:27017",
-        "dbName": "carfix-db",
-        "user": "",
-        "pass": ""
-    },
-    "host": "8080",
-    "accessToken": "some-private-key"
+  "mongo": {
+    "url": "mongodb://localhost:27017",
+    "dbName": "carfix-db",
+    "user": "",
+    "pass": ""
+  },
+  "host": "8080",
+  "accessToken": "some-private-key"
 }
