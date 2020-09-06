@@ -61,4 +61,75 @@ router.put(
   }
 );
 
+router.post("/driver/register", function (req, res) {
+  const newdriver = new Driver(req.body);
+  console.log(newdriver);
+
+  if (newdriver.password != newdriver.password2)
+    return res.status(400).json({ message: "password not match" });
+
+  Driver.findOne({ email: newdriver.email }, function (err, driver) {
+    if (driver)
+      return res
+        .status(400)
+        .json({ authDriver: false, message: "email exits" });
+
+    newdriver.save((err, doc) => {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ success: false });
+      }
+      res.status(200).json({
+        success: true,
+        driver: doc,
+      });
+    });
+  });
+});
+
+router.post("/driver/login", function (req, res) {
+  let token = req.cookies.auth;
+  Driver.findByToken(token, (err, driver) => {
+    if (err) return res(err);
+    if (driver)
+      return res.status(400).json({
+        error: true,
+        message: "You are already logged in",
+      });
+    else {
+      Driver.findOne({ email: req.body.email }, function (err, driver) {
+        if (!driver)
+          return res.json({
+            isAuth: false,
+            message: " Auth failed ,email not found",
+          });
+
+        driver.comparepassword(req.body.password, (err, isMatch) => {
+          if (!isMatch)
+            return res.json({
+              isAuth: false,
+              message: "password doesn't match",
+            });
+
+          driver.generateToken((err, driver) => {
+            if (err) return res.status(400).send(err);
+            res.cookie("auth", driver.token).json({
+              isAuth: true,
+              id: driver._id,
+              email: driver.email,
+            });
+          });
+        });
+      });
+    }
+  });
+});
+
+router.get("/driver/logout", authDriver, function (req, res) {
+  req.driver.deleteToken(req.token, (err, driver) => {
+    if (err) return res.status(400).send(err);
+    res.sendStatus(200);
+  });
+});
+
 export default router;

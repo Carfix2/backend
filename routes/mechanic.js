@@ -76,7 +76,6 @@ router.put(
 );
 
 router.post("/mechanic/register", function (req, res) {
-  // taking a mechanic
   const newmechanic = new Mechanic(req.body);
   console.log(newmechanic);
 
@@ -102,7 +101,6 @@ router.post("/mechanic/register", function (req, res) {
   });
 });
 
-// login mechanic
 router.post("/mechanic/login", function (req, res) {
   let token = req.cookies.auth;
   Mechanic.findByToken(token, (err, mechanic) => {
@@ -113,7 +111,7 @@ router.post("/mechanic/login", function (req, res) {
         message: "You are already logged in",
       });
     else {
-      mechanic.findOne({ email: req.body.email }, function (err, mechanic) {
+      Mechanic.findOne({ email: req.body.email }, function (err, mechanic) {
         if (!mechanic)
           return res.json({
             isAuth: false,
@@ -141,7 +139,6 @@ router.post("/mechanic/login", function (req, res) {
   });
 });
 
-//logout mechanic
 router.get("/mechanic/logout", authMechanic, function (req, res) {
   req.mechanic.deleteToken(req.token, (err, mechanic) => {
     if (err) return res.status(400).send(err);
