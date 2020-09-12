@@ -1,10 +1,11 @@
 {
-    "mongo": {
-        "url": "mongodb+srv://cluster0.e8lcv.gcp.mongodb.net",
-        "dbName": "carfix-db",
-        "user": "carfix-user",
-        "pass": "zM5u5PZm8S1tEv7f"
-    },
-    "host": "8080",
-    "accessToken": "some-private-key"
+  "mongo": {
+    "url": "mongodb+srv://cluster0.e8lcv.gcp.mongodb.net",
+    "dbName": "carfix-db",
+    "user": "carfix-user",
+    "pass": "zM5u5PZm8S1tEv7f"
+  },
+  "host": "8080",
+  "accessToken": "some-private-key",
+  "SECRET": "secretkey"
 }
