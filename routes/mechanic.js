@@ -1,5 +1,10 @@
 const router = require("express").Router();
-const { authMechanic } = require("./authMechanic");
+const express = require("express");
+const auth = require("../middleware/auth");
+const { check, validationResult } = require("express-validator/check");
+const bcrypt = require("bcryptjs");
+const config = require("config");
+const jwt = require("jsonwebtoken");
 import Mechanic from "../database/models/mechanic";
 
 router.get("/me", async (req, res) => {
@@ -27,17 +32,17 @@ router.get("/me", async (req, res) => {
 
 router.put(
   "/updatemechanicprofile",
-  // [
-  //   auth,
-  //   [
-  //     check("workshopName", "workshopName is required").not().isEmpty(),
-  //     check("workshopAddress", "workshopAddress is required").not().isEmpty(),
-  //     check("email", "email is required").not().isEmpty(),
-  //     check("phoneNumber", "phone number is required").not().isEmpty(),
-  //     check("whatsAppNumber", "whatsAppNumber is required").not().isEmpty(),
-  //     check("telegramId", "telegramId is required").not().isEmpty(),
-  //   ],
-  // ],
+  [
+    auth,
+    [
+      check("workshopName", "workshopName is required").not().isEmpty(),
+      check("workshopAddress", "workshopAddress is required").not().isEmpty(),
+      check("email", "email is required").not().isEmpty(),
+      check("phoneNumber", "phone number is required").not().isEmpty(),
+      check("whatsAppNumber", "whatsAppNumber is required").not().isEmpty(),
+      check("telegramId", "telegramId is required").not().isEmpty(),
+    ],
+  ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -75,6 +80,71 @@ router.put(
   }
 );
 
+////////////////////////////////////////////////////////////////////////////////
+//REGISTRATION/////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+router.post(
+  "/",
+  [
+    check("workshopName", "Workshop name is required").not().isEmpty(),
+    check("email", "Please include a valid email").isEmail(),
+    check(
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { workshopName, email, password } = req.body;
+
+    try {
+      let user = await Mechanic.findOne({ email });
+      if (user) {
+        return res
+          .status(400)
+          .json({ errors: [{ msg: "Mechanic already exists!" }] });
+      }
+
+      user = new Mechanic({
+        workshopName,
+        email,
+        password,
+      });
+
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      jwt.sign(
+        payload,
+        config.get("jwtSecret"),
+        { expiresIn: 360000 },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
+/*
 router.post("/mechanic/register", function (req, res) {
   const newmechanic = new Mechanic(req.body);
   console.log(newmechanic);
@@ -145,5 +215,8 @@ router.get("/mechanic/logout", authMechanic, function (req, res) {
     res.sendStatus(200);
   });
 });
+
+
+*/
 
 export default router;
