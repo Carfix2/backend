@@ -3,7 +3,8 @@ const express = require("express");
 const auth = require("../middleware/auth");
 const { check, validationResult } = require("express-validator/check");
 const bcrypt = require("bcryptjs");
-const config = require("config");
+const nconf = require("nconf");
+const jwtSecretToken = nconf.get('jwtSecret')
 const jwt = require("jsonwebtoken");
 import Mechanic from "../database/models/mechanic";
 
@@ -130,7 +131,7 @@ router.post(
 
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
+        jwtSecretToken,
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;

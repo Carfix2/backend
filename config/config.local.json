@@ -6,5 +6,6 @@
     "pass": ""
   },
   "host": "8080",
-  "accessToken": "some-private-key"
+  "accessToken": "some-private-key",
+  "jwtSecret": "mysecrettoken"
 }
