@@ -15,6 +15,7 @@ router.get("/current", authMechanic, async (req, res) => {
   }
 });
 
+// DOESNT WORK
 router.put(
   "/updateProfile",
   [
