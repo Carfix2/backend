@@ -28,6 +28,12 @@ const serverInit = (async () => {
         })
     })
 
+    server.get('/', (req, res) => {
+        return res.status(200).json({
+            "Is Working?": "Yes"
+        })
+    })
+
     server.use('/job', jobRoutes)
     server.use('/mechanic', mechanicRoutes)
     server.use('/driver', driverRoutes)
