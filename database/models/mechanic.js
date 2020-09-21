@@ -32,6 +32,10 @@ const mechanicSchema = Schema({
   telegramId: {
     type: String,
   },
+  isOnboarded: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 mechanicSchema.methods = {
